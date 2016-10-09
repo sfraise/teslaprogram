@@ -33,7 +33,6 @@ WebVRConfig = {
   /**
    * webvr-polyfill configuration
    */
-
   // Forces availability of VR mode.
   //FORCE_ENABLE_VR: true, // Default: false.
   // Complementary filter coefficient. 0 for accelerometer, 1 for gyro.
@@ -98,52 +97,81 @@ WebVRConfig = {
 // Only enable it if you actually need to.
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setPixelRatio(window.devicePixelRatio);
-
 // Append the canvas element created by the renderer to document body element.
 document.body.appendChild(renderer.domElement);
-
 // Create a three.js scene.
 var scene = new THREE.Scene();
-
 // Create a three.js camera.
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-
 // Apply VR headset positional data to camera.
 var controls = new THREE.VRControls(camera);
 controls.standing = true;
-
 // Apply VR stereo rendering to renderer.
 var effect = new THREE.VREffect(renderer);
 effect.setSize(window.innerWidth, window.innerHeight);
 
+/*
+//create a sphere - we'll use the inner surface to project our Mars image on to it
+var geometry  = new THREE.SphereGeometry(50, 200, 200)
+// create the material, using a texture of mars
+var material  = new THREE.MeshBasicMaterial();
+material.map   = THREE.ImageUtils.loadTexture('img/SAM_100_0003.jpg');
+material.side  = THREE.BackSide;
+// create the mesh based on geometry and material
+var mesh  = new THREE.Mesh(geometry, material);
+var skybox = new THREE.Mesh(geometry, material);
+scene.add(skybox);  
+// Create a VR manager helper to enter and exit VR mode.
+var manager = new WebVRManager(renderer, effect, {hideButton: false});
+*/
+/***
+// Create 3D objects.
+var geometry = new THREE.SphereGeometry(0.5, 32, 32);
+var material = new THREE.MeshBasicMaterial();
+var earthMesh = new THREE.Mesh(geometry, material);
+// Position earth mesh
+earthMesh.position.z = 1;
+earthMesh.position.x = 15;
+earthMesh.position.y = 7.25;
+// Add earth mesh to your three.js scene
+scene.add(earthMesh);
+material.map = THREE.ImageUtils.loadTexture('img/earthmap1k.jpg')
+// Add earthMesh mesh to your three.js scene
+scene.add(earthMesh);
+// Request animation frame loop function
+function animate(timestamp) {
+  // Apply rotation to earthMesh mesh
+  earthMesh.rotation.y += 0.01;
+  // Update VR headset position and apply to camera.
+  controls.update();
+  // Render the scene through the manager.
+  manager.render(scene, camera, timestamp);
+  requestAnimationFrame(animate);
+}
+***/
 
 // Add a repeating grid as a skybox.
 var boxSize = 5;
 var loader = new THREE.TextureLoader();
 loader.load('img/box.png', onTextureLoaded);
-
 function onTextureLoaded(texture) {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(boxSize, boxSize);
-
   var geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
     color: 0x01BE00,
     side: THREE.BackSide
   });
-
   // Align the skybox to the floor (which is at y=0).
   skybox = new THREE.Mesh(geometry, material);
   skybox.position.y = boxSize/2;
   scene.add(skybox);
-
   // For high end VR devices like Vive and Oculus, take into account the stage
   // parameters provided.
   setupStage();
 }
-
 
 // Create a VR manager helper to enter and exit VR mode.
 var params = {
@@ -151,50 +179,37 @@ var params = {
   isUndistorted: false // Default: false.
 };
 var manager = new WebVRManager(renderer, effect, params);
-
 // Create 3D objects.
 var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 var material = new THREE.MeshNormalMaterial();
 var cube = new THREE.Mesh(geometry, material);
-
 // Position cube mesh to be right in front of you.
 cube.position.set(0, controls.userHeight, -1);
-
 // Add cube mesh to your three.js scene
 scene.add(cube);
-
 // Kick off animation loop
 requestAnimationFrame(animate);
-
 window.addEventListener('resize', onResize, true);
 window.addEventListener('vrdisplaypresentchange', onResize, true);
-
 // Request animation frame loop function
 var lastRender = 0;
 function animate(timestamp) {
   var delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
-
   // Apply rotation to cube mesh
   cube.rotation.y += delta * 0.0006;
-
   // Update VR headset position and apply to camera.
   controls.update();
-
   // Render the scene through the manager.
   manager.render(scene, camera, timestamp);
-
   requestAnimationFrame(animate);
 }
-
 function onResize(e) {
   effect.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 }
-
 var display;
-
 // Get the HMD, and if we're dealing with something that specifies
 // stageParameters, rearrange the scene.
 function setupStage() {
@@ -207,24 +222,19 @@ function setupStage() {
     }
   });
 }
-
 function setStageDimensions(stage) {
   // Make the skybox fit the stage.
   var material = skybox.material;
   scene.remove(skybox);
-
   // Size the skybox according to the size of the actual stage.
   var geometry = new THREE.BoxGeometry(stage.sizeX, boxSize, stage.sizeZ);
   skybox = new THREE.Mesh(geometry, material);
-
   // Place it on the floor.
   skybox.position.y = boxSize/2;
   scene.add(skybox);
-
   // Place the cube in the middle of the scene, at user height.
   cube.position.set(0, controls.userHeight, 0);
 }
-
 </script>
 
 </html>
