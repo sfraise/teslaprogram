@@ -9,56 +9,36 @@
 </head>
 <body>
 <a-scene class="scene">
+    <!-- SET OUR ASSET MANAGEMENT TO TAKE ADVANTAGE OF PRELOADING -->
+    <a-assets timeout="10000">
+        <img id="lobby-sky" src="assets/img/scene-backgrounds/lobby.jpg" />
+        <img id="hall-sky" src="assets/img/scene-backgrounds/hall.jpg" />
+    </a-assets>
+
     <!-- OUR ENVIRONMENT BACKGROUND -->
-    <a-sky src="assets/img/scene-backgrounds/lobby.jpg"></a-sky>
+    <a-sky id="sky" src="#lobby-sky" rotation="0 -90 0"></a-sky>
 
     <!-- SET OUR CAMERA POSITION -->
-    <a-camera id="player" position="0 1.8 0">
+    <a-entity id="camera" camera="userHeight: 1.6" scale="1 1 1" look-controls wasd-controls>
         <!-- CREATE OUR RAYCAST CURSOR -->
-        <a-cursor color="#ff0000"></a-cursor>
-    </a-camera>
+        <a-cursor id="cursor" color="#ff0000"></a-cursor>
 
-    <!-- CREATE A BOX -->
-    <a-box class="collidable" color="#B76705" depth="2" height="2" width="4" position="-10 0.50 8">
-        <!-- ANIMATE THE BOX 360 DEGREES ON CLICK -->
-        <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
-    </a-box>
+        <!-- SET OUR FORWARD CLICK PLANE -->
+        <!-- JUST EXPERIMENTING WITH THIS
+        <a-plane panonav id="panonav" color="" width="5" height="10" position="0 0 -300" rotation="0 360" material="opacity: 0.4" geometry="" scale="6" visible=""></a-plane>
+        -->
+    </a-entity>
 
     <!-- CREATE A SPHERE -->
-    <a-sphere class="navpoint" nextscene="lobby2" src="assets/img/earthmap1k.jpg"
-              class="collidable" radius="3" position="11.3 -4 15">
+    <a-sphere class="navpoint" nextscene="hall-sky" src="assets/img/earthmap1k.jpg"
+              class="collidable" radius="3" position="0 0 -30">
         <!-- ANIMATE THE BOX 360 DEGREES ON CLICK -->
         <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
     </a-sphere>
 </a-scene>
+<input type="hidden" id="panopos" value="1" />
 </body>
 <script src="js/script.js"></script>
-<script>
-    /*
-    // Component to change to random color on click.
-    AFRAME.registerComponent('navigation-listener', {
-        init: function () {
-            var nextScene = this.el.getAttribute('nextscene');
-            this.el.addEventListener('click', function (evt) {
-                $.ajax({
-                    url: "http://www.codemonkeysllc.com/tesla/2017/vr/scenes/" + nextScene + ".php",
-                    type: "POST",
-                    data: {nextScene: 'nextScene'},
-                    success: function(data) {
-                        // UPDATE SCENE
-                        $('.scene').fadeOut().promise().done(function() {
-                            $('body').html(data);
-                        });
-                    },
-                    error: function (errorThrown) {
-                        $('.error').html(errorThrown);
-                    }
-                });
-            });
-        }
-    });
-    */
-</script>
 </html>
 
 <!--
