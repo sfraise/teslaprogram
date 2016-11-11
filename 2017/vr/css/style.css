@@ -1,0 +1,22 @@
+.raycaster {
+    color: red;
+    background-color: green;
+    height: 5px;
+    width: 5px;
+}
+
+body, #sky {
+    -webkit-transition: all 0.5s linear !important;
+    -moz-transition: all 0.5s linear !important;
+    -ms-transition: all 0.5s linear !important;
+    -o-transition: all 0.5s linear !important;
+    transition: all 0.5s linear !important;
+}
+
+.fadeout {
+    opacity: 0;
+}
+
+.fadein {
+    opacity: 1;
+}

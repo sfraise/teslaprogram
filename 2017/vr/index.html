@@ -1,52 +1,44 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Virtual Reality School</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
-    <style>
-      .raycaster {
-        color: red;
-        background-color: green;
-        height: 5px;
-        width: 5px;
-      }
-    </style>
-  </head>
-  <body>
-    <a-scene>
-      <!-- OUR ENVIRONMENT BACKGROUND -->
-      <a-sky src="assets/img/SAM_100_0003.jpg"></a-sky>
-      
-      <!-- SET OUR CAMERA POSITION -->
-      <a-camera id="player" position="0 1.8 0">
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+</head>
+<body>
+<a-scene class="scene">
+    <!-- SET OUR ASSET MANAGEMENT TO TAKE ADVANTAGE OF PRELOADING -->
+    <a-assets timeout="10000">
+        <img id="lobby-sky" src="assets/img/scene-backgrounds/lobby.jpg" />
+        <img id="hall-sky" src="assets/img/scene-backgrounds/hall.jpg" />
+    </a-assets>
+
+    <!-- OUR ENVIRONMENT BACKGROUND -->
+    <a-sky id="sky" src="#lobby-sky" rotation="0 -90 0"></a-sky>
+
+    <!-- SET OUR CAMERA POSITION -->
+    <a-entity id="camera" camera="userHeight: 1.6" scale="1 1 1" look-controls wasd-controls>
         <!-- CREATE OUR RAYCAST CURSOR -->
-        <a-cursor color="#ff0000"></a-cursor>
-      </a-camera>
-      
-      <!-- CREATE A BOX -->
-      <a-box class="collidable" color="#B76705" depth="2" height="2" width="4" position="-10 0.50 8">
+        <a-cursor id="cursor" color="#ff0000"></a-cursor>
+
+        <!-- SET OUR FORWARD CLICK PLANE -->
+        <!-- JUST EXPERIMENTING WITH THIS
+        <a-plane panonav id="panonav" color="" width="5" height="10" position="0 0 -300" rotation="0 360" material="opacity: 0.4" geometry="" scale="6" visible=""></a-plane>
+        -->
+    </a-entity>
+
+    <!-- CREATE A SPHERE -->
+    <a-sphere class="navpoint" nextscene="hall-sky" src="assets/img/earthmap1k.jpg"
+              class="collidable" radius="3" position="0 0 -30">
         <!-- ANIMATE THE BOX 360 DEGREES ON CLICK -->
         <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
-      </a-box>
-      
-      <!-- CREATE A SPHERE -->
-      <a-sphere src="assets/img/earthmap1k.jpg" class="collidable" radius="3" position="11.3 -4 15">
-        <!-- ANIMATE THE BOX 360 DEGREES ON CLICK -->
-        <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
-      </a-box>
-    </a-scene>
-  </body>
-      <script>
-      AFRAME.registerComponent('collider-check', {
-        dependencies: ['raycaster'],
-        init: function () {
-          this.el.addEventListener('raycaster-intersected', function () {
-            console.log('Player hit something!');
-          });
-        }
-      });
-    </script>
+    </a-sphere>
+</a-scene>
+<input type="hidden" id="panopos" value="1" />
+</body>
+<script src="js/script.js"></script>
 </html>
 
 <!--
