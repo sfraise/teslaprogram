@@ -1,0 +1,23 @@
+<a-scene class="scene">
+    <!-- OUR ENVIRONMENT BACKGROUND -->
+    <a-sky id="sky" src="assets/img/scene-backgrounds/hall.jpg" rotation="0 -90 0"></a-sky>
+
+    <!-- SET OUR CAMERA POSITION -->
+    <a-entity id="camera" camera="userHeight: 1.6" scale="1 1 1" look-controls wasd-controls>
+        <!-- CREATE OUR RAYCAST CURSOR -->
+        <a-cursor id="cursor" color="#ff0000">
+            <a-animation attribute="color" begin="mouseenter" to="green" dur="500"></a-animation>
+            <a-animation attribute="color" begin="mouseleave" to="red" dur="500"></a-animation>
+        </a-cursor>
+    </a-entity>
+
+    <a-plane doorway class="navpoint" nextscene="lobby-1" height="10" width="10" position="3 5 -85" rotation="0 360" material="opacity: 0.5"></a-plane>
+
+    <!-- CREATE A SPHERE
+    <a-sphere class="navpoint" nextscene="lobby-1" src="assets/img/earthmap1k.jpg"
+              class="collidable" radius="3" position="0 0 -30">
+        <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
+    </a-sphere>
+    -->
+</a-scene>
+<input type="hidden" id="panopos" value="1" />
