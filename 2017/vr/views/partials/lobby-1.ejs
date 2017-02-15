@@ -1,0 +1,34 @@
+<a-scene class="scene">
+    <!-- SET OUR ASSET MANAGEMENT TO TAKE ADVANTAGE OF PRELOADING -->
+    <a-assets timeout="10000">
+        <img id="lobby-sky" src="assets/img/scene-backgrounds/lobby-3.jpg" />
+        <img id="hall-sky" src="assets/img/scene-backgrounds/hall.jpg" />
+    </a-assets>
+
+
+    <!-- OUR ENVIRONMENT BACKGROUND -->
+    <a-sky id="sky" src="#lobby-sky" rotation="0 -90 0"></a-sky>
+
+    <!-- SET OUR CAMERA POSITION -->
+    <a-entity id="camera" camera="userHeight: 1.6" scale="1 1 1" look-controls wasd-controls>
+        <!-- CREATE OUR RAYCAST CURSOR -->
+        <a-cursor id="cursor" color="#ff0000">
+            <a-animation attribute="color" begin="mouseenter" to="green" dur="500"></a-animation>
+            <a-animation attribute="color" begin="mouseleave" to="red" dur="500"></a-animation>
+        </a-cursor>
+    </a-entity>
+
+    <!-- SET NAV POINTS -->
+    <a-plane click-hall-1 class="navpoint" nextscene="hall-1" height="20" width="30" position="-135 -4 -85" rotation="0 360" material="opacity: 0.1"></a-plane>
+    <a-plane click-hall-2 class="navpoint" nextscene="hall-2" height="15" width="12" position="-15 -2 -95" rotation="0 360" material="opacity: 0.1"></a-plane>
+    <a-plane click-auditorium-1 class="navpoint" nextscene="auditorium-1" height="18" width="16" position="12 -5 -65" rotation="0 330" material="opacity: 0.1"></a-plane>
+    <a-plane click-auditorium-1-1 class="navpoint" nextscene="auditorium-1" height="16" width="15" position="20 -3 -4" rotation="0 238" material="opacity: 0.1"></a-plane>
+
+    <!-- CREATE A SPHERE
+    <a-sphere class="navpoint" nextscene="hall-1" src="assets/img/earthmap1k.jpg"
+              class="collidable" radius="3" position="0 0 -30">
+        <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
+    </a-sphere>
+    -->
+</a-scene>
+<input type="hidden" id="panopos" value="1" />
